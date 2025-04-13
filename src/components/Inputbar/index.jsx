@@ -1,6 +1,6 @@
 import "./Inputbar.css";
 import React, { useRef } from "react";
-import Tasklist from "../taskList/index.jsx";
+import Tasklist from "../Tasklist/index";
 
 import { useState } from "react";
 
@@ -21,13 +21,17 @@ function InputBar() {
     refvalue.current.value = "";
   };
 
+  function handleDeleteTask(index) {
+    setTasks((prevTasks) => prevTasks.filter((_, i) => i !== index));
+  }
+
   return (
     <div className="input_bar">
       <form onSubmit={handleAddTask}>
         <input type="text" placeholder="Type your message..." ref={refvalue} />
         <button type="submit">Send</button>
       </form>
-      <Tasklist tasks={tasks} />
+      <Tasklist data={tasks} callback={handleDeleteTask} />
     </div>
   );
 }

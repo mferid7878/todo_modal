@@ -1,36 +1,49 @@
+import { useState } from "react";
 import Modal from "../Modal";
 import "./Tasklist.css";
-function taskList({ tasks }) {
-  const handeDeleteTask = (e) => {
-    e.preventDefault();
-    const taskItem = e.target.closest(".task_item");
-    if (taskItem) {
-      taskItem.remove();
-    }
-  };
-  function handleModal({ tasks }) {
-    console.log("s");
+function Tasklist({ data, callback }) {
+  const [view, setWiew] = useState(false);
 
-    <Modal data={tasks} id={index} />;
+  function handleModal() {
+    if (view) {
+      setWiew((prev) => !prev);
+    } else {
+      setWiew((prev) => !prev);
+    }
   }
 
-  return (
-    <div id="taskList">
-      {tasks.map((task, index) => (
+  let renderUi = () => {
+    if (data.length > 0) {
+      return data.map((task, index) => (
         <div key={index} className="task_item">
           <span>{task}</span>
           <div className="buttons">
-            <button className="delete_button" onClick={handeDeleteTask}>
+            <button
+              className="delete_button"
+              onClick={() => {
+                callback(index);
+              }}
+            >
               <i className="fas fa-trash"></i>
             </button>
             <button className="modal_button" onClick={handleModal}>
               <i className="fa-solid fa-eye"></i>
             </button>
           </div>
+          {view !== false && (
+            <Modal
+              data={task}
+              id={index}
+              deleteCallback={callback}
+              modalCallback={handleModal}
+            />
+          )}
         </div>
-      ))}
-    </div>
-  );
+      ));
+    }
+  };
+
+  return <div id="taskList">{renderUi()}</div>;
 }
 
-export default taskList;
+export default Tasklist;
